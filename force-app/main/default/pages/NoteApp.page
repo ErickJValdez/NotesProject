@@ -1,0 +1,33 @@
+<apex:page controller="NoteAppController" lightningStyleSheets="true">
+    
+    <apex:form >
+        <apex:pageblock title="Search Account">
+            <apex:inputText value="{!key}"/>
+            <apex:commandButton value="Search" action="{!searchNow}"/>
+            
+            <apex:pageBlockSection title="Account Information">
+                <apex:outputField value="{!acc.Name}"/>
+            </apex:pageBlockSection>
+        </apex:pageblock>
+        
+        <apex:pageblock title="Notes" id="table">
+            <apex:pageBlockSection columns="1">
+                <apex:pageBlockTable value="{!tempNotes}" var="note">
+                    <apex:column headerValue="Title" value="{!note.Title}"/>
+                    <apex:column headerValue="Body" value="{!note.Body}"/>
+                    <apex:column headerValue="Owner Name" value="{!note.Owner.name}"/>
+                    <apex:column headerValue="Object type" value="{!note.Parent.type}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+            
+            <apex:outputPanel layout="block" styleClass="pSearchShowMore" id="otpNav2">
+                <apex:outputText > Total Records Found: </apex:outputText>  <apex:outputText rendered="{!IF(count>=10000,true,false)}">  10000+ </apex:outputText><apex:outputText rendered="{!IF(count< 10000,true,false)}">  {!count} </apex:outputText>
+                <apex:commandButton value="Previous" action="{!previous}" reRender="table" disabled="{!prevBool}"/>
+                <apex:outputText > Pages: ({!actualPage} / {!numOfPages}) </apex:outputText>
+                <apex:commandButton value="Next" action="{!next}" reRender="table" disabled="{!nextBool}"/> 
+            	<apex:commandButton value="PDF" action="{!pdfPage}" disabled="{!goToPdf}"/><br/><br/>
+
+            </apex:outputPanel>
+        </apex:pageblock>
+    </apex:form>
+</apex:page>
